@@ -1,0 +1,230 @@
+
+<html>
+<head align="center">
+    <!--details-->
+    <meta charset="utf-8" />
+    <title>guess value game</title>
+    <link rel="icon" href="https://i2.wp.com/games.ninjasdev.com/cms/wp-content/uploads/2017/12/cropped-NinjasDEV-Favicon.png?fit=512%2C512" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <!--design-->
+    <style>
+        /*point display*/
+        .pointstyle{
+            border-radius:7px;
+            border: 1px solid rgb(0,0,0);
+            padding: 0px;
+            color: rgb(0,0,0);
+            background-color: transparent;
+            text-align: center;
+        }
+        /*redside*/
+        .redside{
+            outline: 0 none;
+            color:rgb(255,0,0);
+            border-radius:15%;
+        }
+        .redside:hover{
+            box-shadow: 1.7cm grey;
+        }
+        .redside:active{
+            box-shadow:1cm grey;
+        }
+        .redside:disabled{
+            color: grey;
+            border-color: gray;
+            box-shadow:0cm;
+        }
+        /*blue side*/
+        .blueside{
+            outline: 0 none;
+            color:rgb(0,0,255);
+            border-radius:15%;
+        }
+        .blueside:hover{
+            box-shadow:1.7cm grey;
+        }
+        .blueside:active{
+            box-shadow:1cm grey;
+        }
+        .blueside:disabled{
+            color: grey;
+            border-color: gray;
+            box-shadow:0cm;
+        }
+    </style>
+    </head>
+<body align="center">
+    <!--redside-->
+        <label id="namered"></label>
+        <button type="button" id="hired" name="hired" class="redside" onclick="hiredside()">Higher</button>   
+        <button type="button" id="lowred" name="lowred" class="redside"  onclick="lowredside()">Lower</button>  
+        <label id="redpoint" class="pointstyle" width="65" height="60">0</label>
+        <br /><br /><br /><br />
+    <!--display-->
+    <label id="display"></label>
+        <br /><br /><br /><br />
+    <!--blueside-->
+        <label id="nameblue"></label>
+        <button type="button" id="hiblue" name="hiblue" class="blueside"  onclick="hiblueside()">Higher</button>
+        <button type="button" id="lowblue" name="lowblue" class="blueside"  onclick="lowblueside()">Lower</button>  
+        <label id="bluepoint" class="pointstyle" width="65" height="60">0</label>
+    <!--write in display-->
+            <script>
+            //variables
+            var color = ["#0000FF","#FF0000"];
+            var winner;
+            var nownum;
+            var lastnum;
+            var num;
+            var redpointcount = parseInt(0);
+            var bluepointcount = parseInt(0);
+            var roundcount = parseInt(0);
+            //name deta
+            document.getElementById("namered").innerHTML = window.prompt("player red name:");
+            document.getElementById("nameblue").innerHTML = window.prompt("player blue name:");
+            //start turn
+            scolor = randomcolor();
+            if(scolor == color[0]){
+                turnblue();
+            }
+            else {
+                turnred();
+            }
+            scolor = undefined;
+            //functions
+            lastnum = swrn();
+            swrn = undefined;
+            function turnblue(){
+                document.getElementById("hired").disabled = true;
+                document.getElementById("lowred").disabled = true;
+                document.getElementById("namered").style.color = "#808080"
+                document.getElementById("hiblue").disabled = false;
+                document.getElementById("lowblue").disabled = false;
+                document.getElementById("nameblue").style.color = color[0];
+            }
+            function turnred(){
+                document.getElementById("hired").disabled = false;
+                document.getElementById("lowred").disabled = false;
+                document.getElementById("namered").style.color = color[1];
+                document.getElementById("hiblue").disabled = true;
+                document.getElementById("lowblue").disabled = true;
+                document.getElementById("nameblue").style.color = "#808080";
+            }
+            function swrn(){
+                nownum = document.getElementById("display").innerHTML = Math.floor((Math.random() * 13) + 1);
+                return nownum 
+            }
+            function wrn() {
+               nownum = Math.floor((Math.random() * 13) + 1);
+               if(nownum !== lastnum){
+                   document.getElementById("display").innerHTML = nownum;
+               }
+               else{
+                nownum = document.getElementById("display").innerHTML = Math.floor((Math.random() * 13) + 1);
+               }
+               return nownum;
+            }
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            function end(){
+                    roundcount++;
+                if (roundcount == 21){
+                    if (redpointcount > bluepointcount){
+                        winner = document.getElementById("namered").innerHTML + " wins";
+                    } else {
+                        if(redpointcount == bluepointcount){
+                            winner = "tie";
+                        } else {
+                            winner = document.getElementById("nameblue").innerHTML + " wins";
+                        }
+                    }
+                    window.alert("game over "+winner);
+                    document.getElementById("redpoint").innerHTML = redpointcount;
+                    document.getElementById("bluepoint").innerHTML = redpointcount;
+                    roundcount = parseInt(0);
+                    redpointcount = parseInt(0);
+                    bluepointcount = parseInt(0);
+                    wrn();
+                }
+            }
+            //changecolor
+            function randomcolor(){
+                return document.getElementById("display").style.color = color[parseInt(Math.floor(Math.random(1,0) * (1 - 0 + 1)) + 0)];
+            }
+            function changetoblue(){
+                document.getElementById("display").style.color = color[0];
+            }
+            function changetored(){
+                document.getElementById("display").style.color = color[1];
+            }
+        //redside
+            //highredside
+            function hiredside(){
+                nownum = wrn();
+                if(lastnum < nownum){
+                    redpointcount++;
+                    lastnum = nownum;
+                    
+                } else{
+                        redpointcount--;
+                        lastnum = nownum;
+                    }
+                    document.getElementById("redpoint").innerHTML = redpointcount;
+                    changetoblue();
+                    turnblue();
+                    end();
+                }
+            //lowredside
+                function lowredside(){
+                nownum = wrn();
+                if(lastnum > nownum){
+                    redpointcount++;
+                    lastnum = nownum;
+                    
+                } else{
+                        redpointcount--;
+                        lastnum = nownum;
+                    }
+                    document.getElementById("redpoint").innerHTML = redpointcount;
+                    changetoblue();
+                    turnblue();
+                    end();
+                }
+        //blueside
+                //highblueside
+            function hiblueside(){
+                nownum = wrn();
+                if(lastnum < nownum){
+                    bluepointcount++;
+                    lastnum = nownum;
+                    
+                } else{
+                        bluepointcount--;
+                        lastnum = nownum;
+                    }
+                    document.getElementById("bluepoint").innerHTML = bluepointcount;
+                    changetored();
+                    turnred();
+                    end();
+                }
+            //lowblueside
+                function lowblueside(){
+                nownum = wrn();
+                if(lastnum > nownum){
+                    bluepointcount++;
+                    lastnum = nownum;
+                    
+                } else{
+                        bluepointcount--;
+                        lastnum = nownum;
+                    }
+                    document.getElementById("bluepoint").innerHTML = bluepointcount;
+                    changetored();
+                    turnred();
+                    end();
+                }
+            </script>
+</body>
+</html>
